@@ -1,7 +1,5 @@
 export const onLoad = async (state, { $recStart }) => {
   console.log("loaded");
-
-  $recStart.forEach($el => ($el.disabled = true));
 };
 
 export const onClickMicCapture = async (
@@ -15,7 +13,6 @@ export const onClickMicCapture = async (
 
   state.track = stream.getTracks()[0];
   $micCapture.disabled = true;
-  $recStart.forEach($el => ($el.disabled = false));
 
   console.log("captured!");
 };

@@ -1,8 +1,4 @@
 const puppeteer = require("puppeteer");
-const http = require("http");
-const { exec } = require("child_process");
-
-const RETRY_COUNT = 10;
 
 const sleep = msec => {
     return new Promise(resolve => {
@@ -11,30 +7,50 @@ const sleep = msec => {
 };
 
 (async () => {
+    let transportsNum=process.argv[2];
+    let producersNum=process.argv[3];
+
+    console.log(`transports: ${transportsNum} producers: ${producersNum}`);
+
     const browser = await puppeteer.launch({
-        headless:false
+        headless:false,
+        timeout: 5000,
+        args: [
+            "--window-size=412,732",
+            "--disable-gpu",
+            "--autoplay-policy=no-user-gesture-required",
+            "--no-sandbox",
+            "--use-fake-ui-for-media-stream",
+            "--use-fake-device-for-media-stream"
+        ]
     });
     const page = await browser.newPage();
-    await page.goto("http://127.0.0.1:9000/webpack-dev-server/");
+    page.on("pageerror", err => {
+        console.error(err);
+    });
+    page.on("console", msg => {
+        console.log(msg.text());
+    });
 
-    let status = "";
-    let okness = "";
+    await page.goto("http://127.0.0.1:8080/",{
+        timeout: 5000,
+        waitUntil: "load"
+    });
 
-    let isReady = false;
-    for(let retry = 0; retry<RETRY_COUNT;retry++){
-        status = await page.$eval("#status", elm => elm.innerHTML);
-        okness = await page.$eval("#okness", elm => elm.innerHTML);
-        console.log(`retry: ${retry} status: ${status} okness: ${okness}`);
-        if(status.toLowerCase()==="app ready."){
-            isReady = true;
-            break;
-        }
-        await sleep(1000);
-    }
+    await page.evaluate(transportsNum=>{
+        document.getElementById("transports").value=transportsNum;
+    },transportsNum);
+    await page.evaluate(producersNum=>{
+        document.getElementById("producers").value=producersNum;
+    },producersNum);
+    await sleep(1000);
 
-    if(!isReady){
-        await browser.close();
-    }
+    await page.click("#capture-start-button");
+    await sleep(1000);
+
+    await page.click("#record-start-button");
+
+    await sleep(5000);
 
     await browser.close();
 })();

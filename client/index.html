@@ -18,7 +18,7 @@
   <section class="section">
     <div class="container">
       <h2 class="title">Capture mic.</h2>
-      <button class="button is-link" data-mic-capture>capture</button>
+      <button id="capture-start-button" class="button is-link" data-mic-capture>capture</button>
       <audio controls data-mic-audio></audio>
     </div>
   </section>
@@ -26,18 +26,9 @@
   <section class="section">
     <div class="container">
       <h2 class="title">Add transports(= clients) and producers(= tracks)</h2>
-      <div class="buttons">
-        <button class="button is-danger" data-rec-start data-tnum="1" data-pnum="1">1 producers / transport x 1</button>
-      </div>
-      <div class="buttons">
-        <button class="button is-danger" data-rec-start data-tnum="1" data-pnum="2">2 producers / transport x 1</button>
-        <button class="button is-danger" data-rec-start data-tnum="5" data-pnum="2">2 producers / transport x 5</button>
-      </div>
-      <div class="buttons">
-        <button class="button is-danger" data-rec-start data-tnum="5" data-pnum="1">1 producers / transport x 5</button>
-        <button class="button is-danger" data-rec-start data-tnum="10" data-pnum="1">1 producers / transport x 10</button>
-        <button class="button is-danger" data-rec-start data-tnum="25" data-pnum="1">1 producers / transport x 25</button>
-      </div>
+      <label for="transports">Transports:<input id="transports" name="transports" type="number" value="1" min="1" max="10" /></label>
+      <label for="producers">Producers:<input id="producers" name="producers" type="number" value="1" min="1" max="10" /></label>
+      <button id="record-start-button">record</button>
     </div>
   </section>
 
