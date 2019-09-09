@@ -4,12 +4,12 @@ const { exec } = require("child_process");
 
 const startWebpackDevServer = () => {
     return new Promise((resolve, reject) => {
-        exec("webpack-dev-server");
+        const serverProcess = exec("webpack-dev-server");
         const serverCheckTimer = setInterval(() => {
             http.get("http://127.0.0.1:9000/webpack-dev-server/", res => {
                 if (res.statusCode === 200) {
                     clearInterval(serverCheckTimer);
-                    resolve();
+                    resolve(serverProcess);
                 }
             });
         }, 1000);
@@ -17,7 +17,7 @@ const startWebpackDevServer = () => {
 };
 
 (async () => {
-    await startWebpackDevServer();
+    const ps = await startWebpackDevServer();
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -30,4 +30,5 @@ const startWebpackDevServer = () => {
     console.log(`okness: ${okness}`);
 
     await browser.close();
+    ps.kill();
 })();
