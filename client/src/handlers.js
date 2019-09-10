@@ -7,9 +7,21 @@ export const onClickMicCapture = async (
   { $micCapture, $micAudio, $recStart }
 ) => {
   console.log("capturing mic.");
-
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const ctx = new AudioContext();
+  let fakeAudioBuffer = null;
+  const res = await fetch('bgm.mp3');
+  const arrayBuffer = await res.arrayBuffer();
+  const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+  fakeAudioBuffer = audioBuffer;
+  const source = ctx.createBufferSource();
+  source.loop = true;
+  source.buffer = fakeAudioBuffer;
+  const mediaStreamDest = ctx.createMediaStreamDestination();
+  source.connect(mediaStreamDest);
+  source.start();
+  const { stream } = mediaStreamDest;
   $micAudio.srcObject = stream;
+  $micAudio.play();
 
   state.track = stream.getTracks()[0];
   $micCapture.disabled = true;
