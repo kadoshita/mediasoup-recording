@@ -7,8 +7,9 @@ const sleep = msec => {
 };
 
 (async () => {
-    let transportsNum=process.argv[2];
-    let producersNum=process.argv[3];
+    let recordingDuration = parseInt(process.argv[2],10);
+    let transportsNum = process.argv[3];
+    let producersNum = process.argv[4];
 
     console.log(`transports: ${transportsNum} producers: ${producersNum}`);
 
@@ -50,7 +51,9 @@ const sleep = msec => {
 
     await page.click("#record-start-button");
 
-    await sleep(5000);
+    await sleep(recordingDuration * 1000);
+
+    await page.reload();
 
     await browser.close();
 })();
