@@ -3,6 +3,7 @@ module.exports = {
     numWorkers: 1,
     // numWorkers: require("os").cpus().length,
     serverIp: "127.0.0.1",
+    announcedIp: "",
     rtcMinPort: 3001,
     rtcMaxPort: 4000,
     mediaCodecs: [

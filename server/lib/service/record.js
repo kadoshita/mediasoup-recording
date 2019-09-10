@@ -15,9 +15,9 @@ class RecordService {
     };
   }
 
-  async createTransport(router, serverIp) {
+  async createTransport(router, serverIp, announcedIp) {
     const transport = await router.createWebRtcTransport({
-      listenIps: [{ ip: serverIp }]
+      listenIps: [{ ip: serverIp, announcedIp:announcedIp }]
     });
 
     this._transports.set(transport.id, transport);

@@ -18,7 +18,8 @@ module.exports = async (fastify, options, done) => {
 
     const transport = await record.createTransport(
       router,
-      $config.mediasoup.serverIp
+      $config.mediasoup.serverIp,
+      $config.mediasoup.announcedIp
     );
     console.log(`transport created with id ${transport.id}`);
     console.log(`router with id ${router.id} is used`);
